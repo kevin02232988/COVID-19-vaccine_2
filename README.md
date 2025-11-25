@@ -211,6 +211,7 @@ KEYWORDS = [
     'symptoms', 'mandate', 'mask', 'masked', 'unvaccinated', 'vaxxed', 'unvaxxed',
     'hospital', 'death', 'long covid', 'long-covid', 'spike protein', 'mrna'
 ]
+```
 
 앞선 실패한 전처리/토픽 모델링에서 실제로  
 코로나/백신 관련 댓글들이 자주 포함하던 단어들을 **경험적으로 선정**하였다.
