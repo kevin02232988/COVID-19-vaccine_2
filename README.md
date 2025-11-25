@@ -16,7 +16,7 @@
 COVID-19 팬데믹 동안 사람들은 **뉴스 기사**보다  
 온라인 커뮤니티 댓글, 포럼, SNS에서 훨씬 직접적인 감정과 의견을 드러냈다.
 
-기존 연구(예: *COVID 공포지수 vs. 주가*)는  
+기존 연구([Sun Woong Kim (2021). COVID-19 Fear Index and Stock Market. Journal of Convergence for Information Technology, 11(9), 84-93](https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002756191)  : *COVID 공포지수 vs. 주가*)는  
 - 공포지수와 금융시장 사이의 상관성은 잘 보여주지만,
 
 다음 질문에는 충분히 답하지 못한다:
