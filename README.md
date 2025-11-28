@@ -998,3 +998,279 @@ DeBERTa 모델이 예측한 `sentiment_label` (0/1)을 기반으로
 **“온라인 여론 데이터 기반 위험 감지·정책 커뮤니케이션 지원 시스템”**으로  
 확장할 수 있는 잠재력을 가진다.
 
+
+
+
+
+📁 코드 구조 (Code Structure)
+
+프로젝트의 파이썬 스크립트는 역할별로 아래처럼 정리할 수 있다.
+(파일 이름은 현재 네가 사용한 이름을 그대로 살리고, README에서는 역할 단위로 묶어서 설명하는 형태야.)
+
+1. 크롤링 & 원본 수집 (Crawling / Scraping)
+
+온라인 댓글·리뷰 데이터를 각 사이트별로 수집하는 스크립트들.
+
+Reddit / 해외 포럼 크롤링
+
+raddit.py, raddit_autho.py
+
+Reddit API(PRAW) 및 인증 처리
+
+코로나/백신 관련 게시글·댓글 크롤링
+
+reddit_classifie.py
+
+Reddit 기반 데이터 전처리 + 간단 분류 실험용 스크립트
+
+네이버 / 기타 사이트 크롤링
+
+vacine.py, vacine naver.py
+
+네이버 지식iN/뉴스/기타 한국어 데이터 크롤링 시도
+
+pharmacy_P.py, pharmacy_sem.py, pharmacy_tai.py, pharmacy_total.py, Durg_T.py, PP.py
+
+Drugs.com, WebMD, 기타 헬스 관련 사이트 리뷰 크롤링/파싱용 스크립트들
+
+👉 역할 요약:
+여러 사이트에서 코로나/백신 관련 텍스트를 수집하여
+하나의 큰 원본 CSV(FINAL_DATA_CLEANED_READY.csv)로 합치기 위한 단계.
+
+2. 전처리 & 데이터 통합 (Preprocessing & Integration)
+
+수집된 원본 데이터를 정제하고, 불필요한 행/컬럼을 제거·통합하는 스크립트들.
+
+전처리 핵심 로직
+
+refine.py
+
+삭제된 댓글, 짧은 잡담, 비영어 텍스트, URL/특수문자 등
+구조적/형식적 노이즈 제거
+
+code for erase.py
+
+특정 패턴(링크 위주, 의미 없는 중립 텍스트 등) 삭제용 유틸
+
+CSV 병합 및 단계별 통합
+
+11_combine.py, 12 통합.py, 12_com.py, 12aa.py, 12aaa.py, 12aaaa.py, 18_com.py,
+15 combined.py, 15 health.py, 15 H Jemi.py, 16 K.py, 17.py, 17k.py, 25.py,
+com.py, comb.py, comb1.py, 10.py, 10w.py, 10per.py, 기타 번호/이니셜 스크립트들
+
+여러 소스에서 온 CSV를 읽어서 컬럼을 맞추고
+
+중복 제거, 필터링, 샘플링 등을 거쳐
+
+최종 분석용 데이터셋(DDDD.csv)까지 이어지는 중간 단계 파일들 생성
+
+👉 역할 요약:
+크롤링 결과를 정제 → 관련성 필터링(True/False) → 링크/중립 삭제 → 최종 분석용 데이터로
+단계적으로 좁혀 나가는 파이프라인.
+
+3. 수동 라벨링 지원 (Manual Labeling Utilities)
+
+10% 샘플을 뽑아 사람이 직접 감성 라벨을 붙일 수 있도록 도와주는 스크립트.
+
+label.py, rabel.py, rabel d.py, rebel d.py
+
+전체 데이터에서 약 10% 샘플링
+
+labeled_output#.csv, 10_per#_final.csv 형식으로 저장
+
+Binary / Three-Class 라벨을 사람이 직접 입력할 수 있는 형태로 CSV 구성
+
+👉 역할 요약:
+모델 학습용 골드 레이블 데이터셋 생성 도구.
+
+4. 감성 분석 모델 학습 (Sentiment Modeling: KoELECTRA / BERT / DeBERTa)
+
+불균형 감성 데이터(Binary/Three-Class)를 학습하기 위한 모델 스크립트들.
+
+KoELECTRA 기반 실험
+
+koel_finetuning.py
+
+KoELECTRA 모델을 사용한 한국어 감성 분류 실험
+
+Binary / 3-Class 세팅, 클래스 가중치, 오버샘플링 등 시도
+
+BERT / DeBERTa 계열 실험
+
+debert.py, debert 1.py, debert 2.py, debert 3.py, debert 4.py, debert 5.py
+
+debert 1_1.py, debert 1_7.py, devert_3.py
+
+DeBERTa / DeBERTa v3 기반 Binary 감성 분류
+
+각 파일은 손실 함수(Focal Loss), 클래스 가중치, 오버샘플링, Epoch 수 등
+하이퍼파라미터 조합을 바꿔가며 실험한 버전들
+
+학습 로그/성능 분석
+
+accu.py, anal.py, asd.py, asdg.py, f.py, fd.py, gr.py, gra1.py, grh2.py
+
+학습 로그에서 Accuracy, Loss, F1-score 등 읽어와서 표/그래프로 정리
+
+최종으로 Validation Accuracy ~0.87인 DeBERTa 모델 선정
+
+👉 역할 요약:
+여러 모델을 비교하고,
+최종적으로 DeBERTa v3 기반 Binary 감성 분류 모델을 선택하는 과정.
+
+5. 토픽 모델링 (Topic Modeling: LDA / BERTopic)
+
+감성 라벨이 붙은 텍스트에서 어떤 주제가 나오는지 분석하는 스크립트들.
+
+topic.py, topic_1.py
+
+초기 LDA(Latent Dirichlet Allocation) 실험
+
+전처리 문제를 발견하고, 경제·정치·마스크·의료비 등의 토픽 윤곽 파악
+
+이후 BERTopic + HDBSCAN 기반 토픽 모델링 파이프라인 구현
+(토픽별 키워드/Count/Representation 계산, 부정/긍정 분리 토픽 분석 등)
+
+👉 역할 요약:
+부정/긍정 여론이 어떤 주제(정책·의무화·음모론·의료비 등)를 중심으로 형성되는지 정성적·정량적으로 해석.
+
+6. 시계열 & 공포·탐욕 지수 결합 (Time Series & Fear-Greed Index)
+
+날짜별 부정 비율 시계열과 외부 금융 지표(Fear-Greed Index)를 결합하고,
+상관/DTW를 계산하는 스크립트들.
+
+13_time include.py, 14 time include.py
+
+감성 라벨이 붙은 데이터(DDDD.csv)에서 날짜별 부정 비율 계산
+
+FEAR#.csv와 날짜 기준으로 merge
+
+15 combined.py, 16 K.py, 17.py, 17k.py, 18_com.py, 19.py, 20.py, 21.py, 22.py, 23.py, 24.py, 25.py
+
+Fear-Greed Index와 부정 비율의
+
+피어슨 상관계수
+
+p-value
+
+DTW(Dynamic Time Warping) 거리
+등을 계산하고, 그래프용 데이터프레임 생성
+
+👉 역할 요약:
+“온라인 부정 여론”과 “시장 공포 지수”의 시계열 패턴이
+얼마나 동행하는지 정량적으로 검증.
+
+7. 시각화 (Visualization)
+
+분석 결과를 그림으로 만드는 스크립트들. (논문/보고서 Figure 생성용)
+
+13_graph.py, 22_legend.py
+
+시계열 그래프, 막대 그래프, 라벨 분포 등 플롯 생성
+
+debertvisu.py, debertvisu_1.py, debertvisu_2.py
+
+DeBERTa 학습/예측 결과 시각화 (Acc/Loss 곡선, Confusion Matrix 등)
+
+dwq.py, dwq1.py, dwqq.py, dwqqq.py, dwqqqq.py, dwqqqqq.py, dwqqqqqq.py
+
+시각화 시도/버전별 스크립트 (그래프 스타일, 레이블, 축 수정 등 실험)
+
+o.py, oo.py, op.py, q.py, ra.py, run.py, run2.py, to.py
+
+일부 그래프·테스트용 간단한 플롯 스크립트들
+
+👉 역할 요약:
+README / 보고서에서 사용한
+A.png, B.png, C.png, D.png, E.png, 7.png, 8.png, 9.png 등 Figure들을 생성.
+
+8. 실험용 / 임시 스크립트 모음 (Experimental Sandbox)
+
+빠르게 아이디어를 테스트하기 위해 만든 스크립트들.
+최종 파이프라인에는 직접 포함되진 않지만,
+중간 실험 기록으로 남겨둔 코드들.
+
+1.py, 2.py, 3.py, 4.py, 5.py, 6.py, 7.py, 8.py, 9 chet.py, 10.py
+
+100.py, 333.py, 11111.py, 11112.py, 11113.py, 1212.py, 1213.py, 12313.py, 12333.py
+
+d.py, dd.py, f.py, k.py, In_t.py, T.py, 기타 간단 테스트 파일들
+
+👉 역할 요약:
+전처리 규칙, 시각화 스타일, 데이터 샘플링 등을
+빠르게 실험하기 위한 “실험 노트” 역할.
+
+📂 데이터 / 폴더 구조 (Data & Folder Layout)
+
+아래는 교수님께 보여줄 수 있는 최종 데이터 구조 요약이야.
+실제 깃허브에서는 data/ 폴더 아래에 이렇게 정리했다고 보면 된다.
+
+data/
+├─ raw/                # 크롤링 직후 또는 최소 전처리 상태의 원본 데이터
+│   ├─ FINAL_DATA_CLEANED_READY.csv
+│   ├─ FEAR_raw.csv / FEAR_source.csv        # (필요 시) 원본 공포지수
+│   └─ ... (개별 사이트별 원본 CSV들)
+│
+├─ interim/            # 중간 전처리/필터링 결과
+│   ├─ FINAL_DATA_FILTERED_#TRUE.csv
+│   │   # is_related_topic = True 로 남긴 코로나/백신 관련 텍스트
+│   ├─ FINAL_DATA_FILTERED_#FALSE.csv
+│   │   # 관련성이 낮아 제거된 텍스트 (분석에는 사용 X, 검증용)
+│   ├─ FINAL_DATA_ROWS_#DELETED.csv
+│   │   # 링크만 공유하거나, 의미 없는 중립 문장을 추가로 제거한 버전
+│   └─ ... (필요한 중간 버전들)
+│
+├─ processed/          # 분석/모델 학습에 사용되는 최종본들
+│   ├─ DDDD.csv
+│   │   # 최종 분석용 메인 데이터셋
+│   │   # (정제 완료 텍스트 + 날짜 + 사이트 정보 + 모델 예측 감성 등)
+│   ├─ labeled_output#.csv
+│   │   # 전체 데이터의 약 10% 샘플에 대해
+│   │   # 사람이 직접 Binary/Three-Class 감성 라벨을 붙인 결과
+│   ├─ 10_per#_final.csv
+│   │   # 수동 라벨링 정제본 (학습/검증에 실제 사용한 버전)
+│   └─ ... (토픽모델링/시계열용으로 가공된 추가 CSV가 있다면 여기에)
+│
+└─ external/           # 외부 지표/보조 데이터
+    ├─ FEAR#.csv
+    │   # 공포·탐욕 지수(Fear-Greed Index) 시계열
+    │   # 날짜(date) 기준으로 DDDD.csv의 부정 비율과 merge해서 사용
+    └─ ... (향후 추가할 다른 외부 지표들)
+
+주요 CSV 설명 정리
+
+FINAL_DATA_CLEANED_READY.csv
+
+여러 소스에서 크롤링한 원본 데이터를
+기본적인 정제(삭제된 글, 너무 짧은 글, 비영어 등)까지 마친 통합본.
+
+FINAL_DATA_FILTERED_#TRUE.csv
+
+위 데이터에서 코로나/백신 관련 키워드가 포함된 행만 남긴 버전
+
+True/False로 나뉜 것 중 분석에 사용할 “관련 있음” 데이터.
+
+FINAL_DATA_ROWS_#DELETED.csv
+
+TRUE 데이터 중에서도
+링크만 공유하거나, 의견/감정이 거의 없는 중립 문장을 추가로 제거한 버전.
+
+FEAR#.csv
+
+외부에서 가져온 공포·탐욕 지수(Fear-Greed Index) 시계열 데이터.
+
+날짜 기준으로 부정 비율 시계열과 합쳐서 상관/DTW 분석에 사용.
+
+DDDD.csv
+
+최종 분석용 메인 데이터셋.
+
+전처리 + 주제 필터링 + 링크/중립 삭제까지 거친 후,
+DeBERTa Binary 모델의 감성 라벨이 부여된 상태의 데이터.
+
+labeled_output#.csv, 10_per#_final.csv
+
+전체 데이터 중 약 10%를 샘플링해서
+사람이 직접 부정/중립/긍정 라벨을 붙인 결과.
+
+모델 학습/검증에 사용되는 골드 레이블 세트.
