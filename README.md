@@ -3,9 +3,20 @@
 # 🦠 COVID Vaccine Controversy Analysis by BERT/DeBERTa
 **온라인 댓글 기반 코로나 백신 여론 분석 프로젝트**
 
-[![PyTorch](https://img.shields.io/badge/PyTorch-E34F26?style=flat-square&logo=PyTorch&logoColor=white)](https://pytorch.org/)
-[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-FFD21C?style=flat-square&logo=huggingface&logoColor=black)](https://huggingface.co/)
 [![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=Python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=PyTorch&logoColor=white)](https://pytorch.org/)
+[![Hugging Face](https://img.shields.io/badge/Hugging%20Face-FFD21C?style=flat-square&logo=huggingface&logoColor=black)](https://huggingface.co/)
+[![Transformers](https://img.shields.io/badge/Transformers-FF9A00?style=flat-square&logo=huggingface&logoColor=white)](https://huggingface.co/docs/transformers/index)
+[![DeBERTa v3](https://img.shields.io/badge/DeBERTa%20v3-NLP?style=flat-square&color=0A1F44)](https://huggingface.co/docs/transformers/model_doc/deberta_v2)
+[![KoELECTRA](https://img.shields.io/badge/KoELECTRA-Korean%20NLP-blue?style=flat-square)](https://huggingface.co/monologg/koelectra-base-v3-discriminator)
+[![BERTopic](https://img.shields.io/badge/BERTopic-Topic%20Modeling-0A1F44?style=flat-square)](https://maartengr.github.io/BERTopic/)
+[![HDBSCAN](https://img.shields.io/badge/HDBSCAN-Clustering-FF6F00?style=flat-square)](https://hdbscan.readthedocs.io/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![pandas](https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white)](https://numpy.org/)
+[![Matplotlib](https://img.shields.io/badge/Matplotlib-11557c?style=flat-square&logo=Matplotlib&logoColor=white)](https://matplotlib.org/)
+[![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=flat-square&logo=Jupyter&logoColor=white)](https://jupyter.org/)
+
 
 ---
 
