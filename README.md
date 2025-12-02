@@ -468,7 +468,7 @@ KEYWORDS = [
 
 ---
 
-### 5.3 모델 교체: BERT → DeBERTa / DeBERTa v3
+### 5.3 모델 교체: BERT →  DeBERTa v3
 
 KoELECTRA 기반 실험에서:
 
